@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="tx_meal" type="id" />
+    <item name="im_meal" type="id" />
+</resources>
