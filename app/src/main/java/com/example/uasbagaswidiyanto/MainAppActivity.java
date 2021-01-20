@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.ProgressBar;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -25,15 +26,12 @@ import java.util.List;
 
 public class MainAppActivity extends AppCompatActivity {
     DataAdapter adapter;
-    List<Drink> drinks;
+    List<Drink> movies;
     SwipeRefreshLayout srl;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_app_activity);
-
         // Lookup the swipe container view
         srl = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -53,6 +51,11 @@ public class MainAppActivity extends AppCompatActivity {
                 }, 1000); // Delay in millis
             }
         });
+        // Configure the refreshing colors
+        srl.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
         showRecycleView();
     }
 
@@ -61,12 +64,12 @@ public class MainAppActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this,2);
         view.setLayoutManager(mLayoutManager);
 
-        drinks = MainActivity.db.dataDao().getAll(); //Ambil semua data
-        adapter = new DataAdapter(drinks, this);
+        movies = MainActivity.db.dataDao().getAll(); //Ambil semua data
+        adapter = new DataAdapter(movies, this);
         view.setAdapter(adapter);
     }
 
-    private void load(){
+    private void load() {
         // ambil data berupa json dari themealdb
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=Cocktail";
@@ -95,7 +98,6 @@ public class MainAppActivity extends AppCompatActivity {
                                     MainActivity.db.dataDao().insertAll(new Drink(nama, image));
                                 }
                                 showRecycleView();
-
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -112,4 +114,5 @@ public class MainAppActivity extends AppCompatActivity {
 
         queue.add(jsonObjectRequest);
     }
+
 }

@@ -21,21 +21,17 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public class  MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
     ProgressBar pb;
     static MyDatabase db;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         db = Room.databaseBuilder(getApplicationContext(), MyDatabase.class, "database").allowMainThreadQueries().build();
-
         // ambil seluruh data dari dari dao
         List<Drink> drinks = db.dataDao().getAll();
-
         if(drinks.size() > 0) { // jika tak ada data
             Intent i = new Intent(getApplicationContext(), MainAppActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -43,6 +39,8 @@ public class  MainActivity extends AppCompatActivity {
             finish();
             return;
         }
+
+        pb = (ProgressBar) findViewById(R.id.progress_horizontal);
 
         // ambil data berupa json dari themealdb
         RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
@@ -77,7 +75,6 @@ public class  MainActivity extends AppCompatActivity {
                                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 getApplicationContext().startActivity(i);
                                 finish();// tutup activity ini
-
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

@@ -24,5 +24,4 @@ public abstract class DataDao {
 
     @Delete
     public abstract void delete(Drink drink);
-
 }
